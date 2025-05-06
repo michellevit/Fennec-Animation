@@ -1,8 +1,15 @@
 # Fennec Animation
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+![Next.js](https://img.shields.io/badge/Next.js-15.3.1-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-19.0.0-61dafb?style=flat-square&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-yellow?style=flat-square&logo=javascript)
 
 A JavaScript/React project which animates 8-bit images to accompany a song.
+
+[![Demo](https://img.shields.io/badge/DEMO-004596?style=for-the-badge)](https://fennec.michellef.dev)
+
+## Table of Contents
 
 - [Getting Started](#getting-started)
 - [Running Locally](#running-locally)
@@ -36,10 +43,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Creating Pixel Art
 
-- ChatGPT
+- [ChatGPT](https://openai.com/index/chatgpt/)
 - [Pixil Art](https://www.pixilart.com/)
-
-## Deploying to a Website
 
 ## To Do
 

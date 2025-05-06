@@ -70,50 +70,58 @@ If you want your project to be accessible at a custom domain like fennec-animati
 
 #### Step 1: Add a CNAME File to the Project
 
-In your project, go to the public/ directory.
+- In your project, go to the public/ directory.
+- Create a file named CNAME (no extension).
+- Inside the file, write your subdomain:
+  - fennec-animation.michellef.dev
+  - This file will be included in the export and tells GitHub Pages to use this domain.
+- Commit and push the changes to main:
 
-Create a file named CNAME (no extension).
+  ```powershell
+  git add public/CNAME
+  git commit -m "Add CNAME file for custom domain"
+  git push origin main
+  ```
 
-Inside the file, write your subdomain:
-fennec-animation.michellef.dev
-This file will be included in the export and tells GitHub Pages to use this domain.
+- Then deploy:
+
+  ```powershell
+  npm run deploy
+  ```
+
+- The CNAME file must be included in the gh-pages branch for GitHub Pages to recognize and apply the custom domain.
+- Adding it to the main branch ensures it's part of your source project and picked up during each deployment.
 
 #### Step 2: Configure DNS Records
 
-In your domain provider’s DNS settings, add a CNAME record with the following values:
+- In your domain provider’s DNS settings, add a CNAME record with the following values:
 
-- Host: fennec-animation.michellef.dev
-- Points to: michellevit.github.io
+  - Host: fennec.michellef.dev
+  - Points to: michellevit.github.io
 
-Important Notes:
-
-The CNAME value must be a domain (e.g., michellevit.github.io)
-
-Do not include the full GitHub Pages URL with a path (e.g., /Fennec-Animation/)
+- Important Notes:
+  - The CNAME value must be a domain (e.g., michellevit.github.io)
+  - Do not include the full GitHub Pages URL with a path (e.g., /Fennec-Animation/)
 
 #### Step 3: Configure Custom Domain in GitHub
 
-Go to your repository on GitHub.
-
-Navigate to: Settings > Pages
-
-In the Custom Domain field, enter:
-fennec-animation.michellef.dev
-Click Save.
-
-Optionally check Enforce HTTPS once available.
-
-This step finalizes the link between your domain and the repository.
+- Go to your repository on GitHub.
+- Navigate to: Settings > Pages
+- In the Custom Domain field, enter:
+  - fennec.michellef.dev
+  - Click Save.
+- Check Enforce HTTPS once available.
+- This step finalizes the link between your domain and the repository.
 
 #### Step 4: Redeploy
 
-After updating the CNAME file and DNS settings, redeploy your site:
+- After updating the CNAME file and DNS settings, redeploy your site:
 
-```powershell
-npm run deploy
-```
+  ```powershell
+  npm run deploy
+  ```
 
-GitHub will now serve your project at the custom subdomain.
+- GitHub will now serve your project at the custom subdomain.
 
 ## 7. Updating the Deployed Project
 
