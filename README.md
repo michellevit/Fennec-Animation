@@ -4,6 +4,12 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 A JavaScript/React project which animates 8-bit images to accompany a song.
 
+- [Getting Started](#getting-started)
+- [Running Locally](#running-locally)
+- [Deploying to the Web](./docs/deploying-to-the-web.md)
+- [Creating Pixel Art](#creating-pixel-art)
+- [To Do](#to-do)
+
 ## Getting Started
 
 Clone the repository:
@@ -18,6 +24,8 @@ Install dependencies
 npm install
 ```
 
+## Running Locally
+
 Run the development server:
 
 ```powershell
@@ -26,23 +34,21 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Creating 8-bit PNGs
+## Creating Pixel Art
 
 - ChatGPT
 - [Pixil Art](https://www.pixilart.com/)
+
+## Deploying to a Website
 
 ## To Do
 
 - Create start/end sprite images
 - Configure sprite canvas size + location
 - How to modify sprite speed + run until last 3 seconds
-- Create side-scroll background .png
-- Add side-scroll background
-- Create side-scroll foreground elements .png
-- Add side-scroll foreground elements
-- Create side-scroll sky .png
-- Add side-scroll sky
-- Create sky elements .png
-- Add side-scroll sky elements
+- Create side-scroll background .png + configure
+- Create side-scroll foreground elements .png + configure
+- Create side-scroll sky + configure
+- Create sky elements .png (sun, moon, clouds, stars) + configure
 - Add customizable controls
 - Add instructions
