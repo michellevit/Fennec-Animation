@@ -117,7 +117,7 @@ npm run deploy-mac
 
 ## General Notes
 
-### Different between npm run dev + npm run preview
+### Different between npm run dev + npm run preview:
 
 #### npm run dev
 
@@ -133,7 +133,7 @@ npm run deploy-mac
 - Exactly what will be deployed to production.
 - Useful for realistic testing.
 
-### Local vs Network Testing in Development:
+### npm run preview: Local vs Network:
 
 When running the local preview server, you'll see two addresses:
 
