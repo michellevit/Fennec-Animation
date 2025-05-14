@@ -14,8 +14,8 @@ A JavaScript/React project which animates 8-bit images to accompany a song.
 - [Getting Started](#getting-started)
 - [Deploying to the Web](./docs/deploying-to-the-web.md)
 - [Running Locally](#running-locally)
+- [Running Production Preview](#running-production-preview)
 - [Deploying Updates to Production](#deploying-updates-to-production)
-- [Production Preview](#production-preview)
 - [Creating Pixel Art](#creating-pixel-art)
 - [To Do](#to-do)
 
@@ -43,6 +43,18 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+**Note:** It may be better to [run via preview](#running-production-preview) instead (but don't run both at the same time)
+
+## Running Production Preview
+
+To simulate production locally before deploying:
+
+```powershell
+npm run preview
+```
+
+The link to the preview server will automatically be copied to your clipboard.
+
 ## Deploying Updates to Production
 
 After making changes to your project:
@@ -69,22 +81,6 @@ This will:
 - Export it as static files to /out
 - Push the new files to the gh-pages branch
 - Your deployed site will now reflect the latest changes.
-
-## Production Preview
-
-To simulate production locally before deploying:
-
-```powershell
-npm run export
-```
-
-Then separately (in another Terminal window) run:
-
-```powershell
-npx serve out
-```
-
-Then visit the provided port.
 
 ## Creating Pixel Art
 
