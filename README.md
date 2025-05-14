@@ -17,7 +17,9 @@ A JavaScript/React project which animates 8-bit images to accompany a song.
 - [Running Production Preview](#running-production-preview)
 - [Deploying Updates to Production](#deploying-updates-to-production)
 - [Creating Pixel Art](#creating-pixel-art)
-- [To Do](#to-do)
+- [Notes for Non-Windows Users](#notes-for-non-windows-users)
+- [General Notes](#general-notes)
+<!-- [To Do](#to-do) -->
 
 ## Getting Started
 
@@ -57,6 +59,9 @@ The link to the preview server will automatically be copied to your clipboard.
 
 ## Deploying Updates to Production
 
+**Note:** The deploy process in this project includes a Windows-specific clean step.  
+If you're using macOS or Linux, see the [Notes for Non-Windows Users](#notes-for-non-windows-users) section.
+
 After making changes to your project:
 
 #### Step 1: Commit and Push to GitHub
@@ -75,20 +80,88 @@ This updates your GitHub repository's main branch.
 npm run deploy
 ```
 
+Or `npm run deploy-mac` for Mac uses (see [Notes for Non-Windows Users](#notes-for-non-windows-users) for more details)
+
 This will:
 
 - Rebuild your project using next build
-- Export it as static files to /out
-- Push the new files to the gh-pages branch
-- Your deployed site will now reflect the latest changes.
+- Export the contents of the /out folder to the gh-pages branch
+- This keeps your source code in main, and your deployed static site in gh-pages
 
 ## Creating Pixel Art
 
 - [ChatGPT](https://openai.com/index/chatgpt/)
 - [Pixil Art](https://www.pixilart.com/)
 
-## To Do
+## Notes for Non-Windows Users
 
+The `deploy` command in `package.json` includes a Windows-specific clean step:
+
+```json
+"deploy": "npm run build && gh-pages -d out --dotfiles",
+"build": "npm run clean && next build",
+"clean": "powershell -ExecutionPolicy Bypass -File .\\scripts\\clean.ps1"
+```
+
+The clean.ps1 script resolves a Windows-only file lock issue where media files (like mp3s) in /public/ can cause builds to fail.
+
+On macOS and Linux, this issue does not occur.
+
+However, since npm run build always triggers npm run clean, this will fail on Mac because PowerShell isn't installed.
+
+There is an alternative deploy-mac command to avoid this:
+
+```bash
+npm run deploy-mac
+```
+
+## General Notes
+
+### Different between npm run dev + npm run preview
+
+#### npm run dev
+
+- Hot reloads on file changes.
+- Includes dev-only code (warnings, slow paths).
+- Fast rebuilds for dev feedback.
+- Not optimized for speed or size.
+
+#### npm run preview
+
+- Uses output of next build (optimized, minified, production-ready files).
+- No hot reloads.
+- Exactly what will be deployed to production.
+- Useful for realistic testing.
+
+### Local vs Network Testing in Development:
+
+When running the local preview server, you'll see two addresses:
+
+- http://localhost:5000
+- http://10.0.0.89:5000
+
+#### Use http://localhost:5000 when:
+
+- Testing in your local browser (Chrome, Firefox, Edge).
+- Previewing layout, animations, and functionality on your own computer.
+- You don’t need to test from other devices.
+
+#### Use http://10.0.0.89:5000 when:
+
+- Testing the site on a phone, tablet, or another device connected to your Wi-Fi/LAN.
+- Checking responsive layouts and touch interactions on different screen sizes.
+- Demoing the project to someone else on the same network.
+
+#### Summary
+
+- Both links serve the exact same local build.
+- The only difference is which device you're accessing it from.
+- localhost only works on the computer you run `npm run preview` on
+
+<!--
+
+🛠️ TODO
+-----------------------------------
 - Create start/end sprite images
 - Configure sprite canvas size + location
 - How to modify sprite speed + run until last 3 seconds
@@ -98,3 +171,6 @@ This will:
 - Create sky elements .png (sun, moon, clouds, stars) + configure
 - Add customizable controls
 - Add instructions
+- Attempt local + prod deploy with Mac
+
+-->

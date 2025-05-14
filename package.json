@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "powershell -ExecutionPolicy Bypass -File .\\scripts\\clean.ps1",
+    "build": "npm run clean && next build",
+    "deploy": "npm run build && gh-pages -d out --dotfiles",
+    "deploy-mac": "next build && gh-pages -d out --dotfiles",
     "dev": "next dev --turbopack -p 3000",
-    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "npm run build && gh-pages -d out",
     "serve-out": "npx serve out -l 5000",
     "preview": "npm-run-all build serve-out"
   },
