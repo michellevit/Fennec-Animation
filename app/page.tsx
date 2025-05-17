@@ -2,7 +2,7 @@
 
 // app/page.tsx
 
-import Controller from "@/components/Controller";
+import Controller from "@/components/Controller/Controller";
 
 export default function HomePage() {
   return (

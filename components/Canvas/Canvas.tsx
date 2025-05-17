@@ -4,7 +4,7 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import "./Canvas.css";
-import Animation from "@/components/Animation";
+import Animation from "@/components/Animation/Animation";
 
 export type AnimationCanvasProps = {
   currentTime: number;

@@ -4,7 +4,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import "./Controller.css";
-import Canvas from "@/components/Canvas";
+import Canvas from "@/components/Canvas/Canvas";
 
 export default function Controller() {
   const audioRef = useRef<HTMLAudioElement>(null);
