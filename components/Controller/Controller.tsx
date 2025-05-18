@@ -90,7 +90,7 @@ export default function Controller() {
   return (
     <div className="controller">
       <audio ref={audioRef} preload="auto" style={{ display: "none" }}>
-        <source src="/music/fennec-takes-charge.mp3" type="audio/mpeg" />
+        <source src="/music/song.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
 

@@ -162,14 +162,18 @@ When running the local preview server, you'll see two addresses:
 
 🛠️ TODO
 -----------------------------------
-- Create start/end sprite images
-- Configure sprite canvas size + location
-- How to modify sprite speed + run until last 3 seconds
-- Create side-scroll background .png + configure
+- Automatically get song duration:
+    - Load your MP3 with a hidden <audio> tag (done in Controller.tsx?)
+    - Read its .duration once metadata is loaded
+    - Store that value globally (e.g. in a React state, context, or config)
+- Smoother frame movement
+- Faster fox running
+- Dynamic calculation of SEGMENT_DURATION in groundConfig.ts
+    - Should automatically change based on number of scene
+- Define animationDuration somewhere more easy to conifgure for entire
 - Create side-scroll foreground elements .png + configure
-- Create side-scroll sky + configure
 - Create sky elements .png (sun, moon, clouds, stars) + configure
-- Add customizable controls
+- Make modifications > more user-friendly
 - Add instructions
 - Attempt local + prod deploy with Mac
 

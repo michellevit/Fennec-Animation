@@ -1,7 +1,7 @@
 // components/Animation/config/groundConfig.ts
 
 // Total animation duration (optional reference)
-export const groundAnimationDuration = 90; // seconds
+export const animationDuration = 90; // seconds
 
 // Duration per segment (scene or transition)
 export const SEGMENT_DURATION = 10;

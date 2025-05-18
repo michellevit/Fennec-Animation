@@ -38,7 +38,7 @@ export default function Animation({
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    drawSky(ctx, canvas);
+    drawSky(ctx, canvas, currentTime);
     drawGround(ctx, canvas, currentTime, images);
     drawSprite(ctx, canvas, currentTime, images);
   }, [canvas, ctx, currentTime, images]);
