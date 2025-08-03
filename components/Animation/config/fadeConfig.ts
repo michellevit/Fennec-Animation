@@ -4,14 +4,14 @@ export const fadeConfig = {
   // Fade in: from black → transparent
   in: {
     start: 0,
-    duration: 0.6,
+    duration: 1.5,
     ease: "outCubic",
   },
 
   // Fade out: from transparent → black
   out: {
-    start: 85,
-    duration: 5.0,
+    start: 82,
+    duration: 8.0,
     ease: "inCubic",
   },
 } as const;

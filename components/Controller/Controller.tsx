@@ -1,7 +1,6 @@
 "use client";
 
 // components/Controller.tsx
-
 import React, { useRef, useState, useEffect } from "react";
 import "./Controller.css";
 import Canvas from "@/components/Canvas/Canvas";
@@ -12,37 +11,49 @@ export default function Controller() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  useEffect(() => {
-    console.log("Controller mounted");
-
+  // Reset handler: pause, rewind, update state
+  const reset = () => {
     const audio = audioRef.current;
-    if (!audio) {
-      console.log("Audio element not found");
-      return;
-    }
+    if (!audio) return;
+    audio.pause();
+    audio.currentTime = 0;
+    setIsPlaying(false);
+    setCurrentTime(0);
+  };
 
-    const updateTime = () => {
-      setCurrentTime(audio.currentTime);
-    };
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
-    const setAudioDuration = () => {
-      if (audio.duration && !duration) {
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    const onLoaded = () => {
+      if (audio.duration && duration === 0) {
         setDuration(audio.duration);
       }
     };
+    const onEnded = () => reset();
 
     audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("loadedmetadata", setAudioDuration);
+    audio.addEventListener("loadedmetadata", onLoaded);
+    audio.addEventListener("ended", onEnded);
 
-    // Fallback if loadedmetadata doesn’t fire
-    const durationCheck = setTimeout(setAudioDuration, 1500);
+    // Fallback for browsers that don't fire loadedmetadata reliably
+    const durationCheck = setTimeout(onLoaded, 1500);
 
     return () => {
       audio.removeEventListener("timeupdate", updateTime);
-      audio.removeEventListener("loadedmetadata", setAudioDuration);
+      audio.removeEventListener("loadedmetadata", onLoaded);
+      audio.removeEventListener("ended", onEnded);
       clearTimeout(durationCheck);
     };
   }, [duration]);
+
+  // Reset exactly at 90 seconds
+  useEffect(() => {
+    if (currentTime >= 90) {
+      reset();
+    }
+  }, [currentTime]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -63,15 +74,6 @@ export default function Controller() {
       audio.pause();
       setIsPlaying(false);
     }
-  };
-
-  const reset = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    audio.pause();
-    audio.currentTime = 0;
-    setIsPlaying(false);
   };
 
   const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {

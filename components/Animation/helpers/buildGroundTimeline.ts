@@ -9,105 +9,65 @@ export type GroundFrameSegment = {
 };
 
 export function buildGroundTimeline(): GroundFrameSegment[] {
+  // Find run phase timing
   const run = spritePhaseTimings.find((p) => p.key === "run");
   if (!run) return [];
 
-  const RUN_START = run.start; // 1
-  const RUN_END = run.start + run.duration; // 84
+  const RUN_START = run.start;
+  const RUN_DURATION = run.duration;
+  const RUN_END = RUN_START + RUN_DURATION;
 
-  const TRANSITION_DURATION = 2; // each transition
-  const WRAP_ONCE = true; // include 4->1
+  // Duration knobs
+  const TRANSITION_DURATION = 2; // seconds per transition
+  const WRAP_ONCE = true; // include the wrap transition
+  const TAIL_SECONDS = 5; // total seconds for tail A→B→A
 
-  // Map for quick transition lookup
-  const tMap = new Map<string, string>();
-  for (const t of transitions) tMap.set(`${t.from}->${t.to}`, t.frame);
+  // 1) Build head sequence: scene frames + transitions
+  const headSequence: string[] = [];
+  scenes.forEach((scene, i) => {
+    headSequence.push(...scene.frames);
+    const nextKey = scenes[(i + 1) % scenes.length].key;
+    const trans = transitions.find(
+      (t) => t.from === scene.key && t.to === nextKey
+    );
+    if (trans) headSequence.push(trans.frame);
+  });
 
-  // Helper to push clamped, gap-free segments
+  // 2) Tail sequence: fixed A→B→A
+  const firstSceneFrames = scenes[0].frames;
+  const tailSequence = firstSceneFrames.slice(0, 2).concat(firstSceneFrames[0]);
+
+  // Compute per-segment durations
+  const headCount = headSequence.length;
+  const tailCount = tailSequence.length;
+  const headTotal = Math.max(0, RUN_DURATION - TAIL_SECONDS);
+  const headPer = headCount > 0 ? headTotal / headCount : 0;
+  const tailPer = tailCount > 0 ? TAIL_SECONDS / tailCount : 0;
+
+  // 3) Build segments
   const segments: GroundFrameSegment[] = [];
   let cursor = RUN_START;
 
-  const pushSeg = (imagePath: string, length: number) => {
+  // Head segments
+  for (const path of headSequence) {
     const start = cursor;
-    const end = Math.min(cursor + Math.max(length, 0), RUN_END);
+    const end = Math.min(cursor + headPer, RUN_END);
     if (end > start)
-      segments.push({ imagePath, startTime: start, endTime: end });
+      segments.push({ imagePath: path, startTime: start, endTime: end });
     cursor = end;
-  };
-
-  const N = scenes.length;
-  const framesPerScene = scenes[0]?.frames?.length ?? 2;
-  const baseTransitions = Math.max(0, N - 1);
-  const transitionsUsed = baseTransitions + (WRAP_ONCE ? 1 : 0);
-  const timeForTransitions = transitionsUsed * TRANSITION_DURATION;
-
-  const TAIL_SECONDS = 5;
-
-  const usableForScenes = Math.max(
-    0,
-    RUN_END - RUN_START - timeForTransitions - TAIL_SECONDS
-  );
-  const PER_FRAME = usableForScenes / (N * framesPerScene);
-
-  // 1) Scenes 1..N with transitions 1..(N-1)
-  for (let i = 0; i < N; i++) {
-    const scene = scenes[i];
-    const frames = scene.frames ?? [];
-
-    // scene frames
-    for (const framePath of frames) {
-      if (cursor >= RUN_END) break;
-      pushSeg(framePath, PER_FRAME);
-    }
-    if (cursor >= RUN_END) break;
-
-    // transition to next (wrap once after scene_4)
-    const isLast = i === N - 1;
-    const from = scene.key;
-    const to = isLast ? scenes[0].key : scenes[i + 1].key;
-    const shouldTransition = !isLast || WRAP_ONCE;
-    if (shouldTransition && cursor < RUN_END) {
-      const tf = tMap.get(`${from}->${to}`);
-      if (tf) pushSeg(tf, TRANSITION_DURATION);
-      else pushSeg(frames[frames.length - 1]!, TRANSITION_DURATION); // fallback if frame missing
-    }
-    if (cursor >= RUN_END) break;
   }
 
-  // 2) Tail: deterministic finish after transition_4
-  if (cursor < RUN_END - 1e-6) {
-    const [a, b] = scenes[0].frames ?? [];
-    if (a && b) {
-      const remaining = RUN_END - cursor;
-
-      // Split the remaining time ~50/50 between A and B (tweak if you like)
-      const slice1 = Math.max(remaining * 0.5, 1e-3);
-      const slice2 = remaining - slice1;
-
-      // Slice 1: scene_1/scene_a
-      segments.push({
-        imagePath: a,
-        startTime: cursor,
-        endTime: cursor + slice1,
-      });
-      cursor += slice1;
-
-      // Slice 2: scene_1/scene_b to RUN_END
-      segments.push({ imagePath: b, startTime: cursor, endTime: RUN_END });
-      cursor = RUN_END;
-
-      // Tiny static hold on scene_1/scene_b so drawGround's "last segment holds" works
-      const EPS = 1 / 60; // ~1 frame
-      segments.push({
-        imagePath: b,
-        startTime: RUN_END,
-        endTime: RUN_END + EPS,
-      });
-      cursor = RUN_END + EPS;
-    }
+  // Tail segments
+  for (const path of tailSequence) {
+    const start = cursor;
+    const end = Math.min(cursor + tailPer, RUN_END);
+    if (end > start)
+      segments.push({ imagePath: path, startTime: start, endTime: end });
+    cursor = end;
   }
 
-  // IMPORTANT: keep only the non-shrinking clamp (or remove it)
-  if (segments.length && segments[segments.length - 1].endTime < RUN_END) {
+  // 4) Clamp final drift
+  if (segments.length) {
     segments[segments.length - 1].endTime = RUN_END;
   }
 
