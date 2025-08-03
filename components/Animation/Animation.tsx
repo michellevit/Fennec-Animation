@@ -1,12 +1,17 @@
-// Updated Animation.tsx with spritePhaseTimings removed
+// components/Animation/Animation.tsx
 
 import { useEffect, useState } from "react";
-import { spriteFrames } from "@/components/Animation/config/spriteConfig";
-import { groundTimeline } from "@/components/Animation/config/groundConfig";
 import { preloadImages } from "@/utils/preloadImages";
 import { drawSky } from "./helpers/drawSky";
 import { drawGround } from "./helpers/drawGround";
 import { drawSprite } from "./helpers/drawSprite";
+import { drawFade } from "./helpers/drawFade";
+
+import {
+  scenes,
+  transitions,
+} from "@/components/Animation/config/groundConfig";
+import { spritePhaseTimings } from "@/components/Animation/config/spriteConfig";
 
 type AnimationProps = {
   canvas: HTMLCanvasElement | null;
@@ -23,13 +28,15 @@ export default function Animation({
   const [images, setImages] = useState<Record<string, HTMLImageElement>>({});
 
   useEffect(() => {
-    const allGroundImages = groundTimeline.flatMap((segment) => segment.frames);
-    const allSpriteFrames = [
-      ...spriteFrames.start,
-      ...spriteFrames.run,
-      ...spriteFrames.jump,
+    const groundFrames = [
+      ...scenes.flatMap((scene) => scene.frames),
+      ...transitions.map((t) => t.frame),
     ];
-    const allFrames = [...allSpriteFrames, ...allGroundImages];
+
+    const spriteFrames = spritePhaseTimings.flatMap((phase) => phase.frames);
+
+    const allFrames = [...groundFrames, ...spriteFrames];
+
     preloadImages(allFrames).then(setImages);
   }, []);
 
@@ -41,6 +48,7 @@ export default function Animation({
     drawSky(ctx, canvas, currentTime);
     drawGround(ctx, canvas, currentTime, images);
     drawSprite(ctx, canvas, currentTime, images);
+    drawFade(ctx, canvas, currentTime);
   }, [canvas, ctx, currentTime, images]);
 
   return null;

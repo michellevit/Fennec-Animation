@@ -1,8 +1,7 @@
-import { groundTimeline } from "../config/groundConfig";
-import { spritePhaseTimings } from "../config/spriteConfig";
+import { buildGroundTimeline } from "./buildGroundTimeline";
 
-const DEFAULT_SCROLL_SCREENS = 1;
-const TRANSITION_SCROLL_SCREENS = 2;
+const timeline = buildGroundTimeline();
+const norm = (p: string) => (p.startsWith("/") ? p : "/" + p);
 
 export function drawGround(
   ctx: CanvasRenderingContext2D,
@@ -10,86 +9,50 @@ export function drawGround(
   currentTime: number,
   images: Record<string, HTMLImageElement>
 ) {
-  const isRunning =
-    currentTime >= spritePhaseTimings.run.start + 0.05 &&
-    currentTime < spritePhaseTimings.run.end;
+  const currentIndex = timeline.findIndex(
+    (segment) =>
+      currentTime >= segment.startTime && currentTime < segment.endTime
+  );
 
-  let timeCursor = 0;
-  let activeSegmentIndex = -1;
-  let activeSegment;
-
-  for (let i = 0; i < groundTimeline.length; i++) {
-    const segment = groundTimeline[i];
-    if (
-      currentTime >= timeCursor &&
-      currentTime < timeCursor + segment.duration
-    ) {
-      activeSegmentIndex = i;
-      activeSegment = { ...segment, startTime: timeCursor };
-      break;
+  if (currentIndex === -1) {
+    const fallback =
+      currentTime < (timeline[0]?.startTime ?? 0)
+        ? timeline[0]
+        : timeline.at(-1)!;
+    const img = images[norm(fallback.imagePath)]; // normalize here too
+    if (img) {
+      const y = canvas.height - img.height;
+      ctx.drawImage(img, 0, y);
     }
-    timeCursor += segment.duration;
+    return;
   }
 
-  if (!activeSegment) return;
+  const currentSegment = timeline[currentIndex];
+  const nextSegment = timeline[currentIndex + 1];
 
-  const segmentElapsed = currentTime - activeSegment.startTime;
-  const isTransition = activeSegment.frames.length === 1;
-  const scrollScreens = isTransition
-    ? TRANSITION_SCROLL_SCREENS
-    : DEFAULT_SCROLL_SCREENS;
-  const totalScrollDistance = canvas.width * scrollScreens;
-  const scrollSpeed = totalScrollDistance / activeSegment.duration;
-  const easingDuration = 2;
-  const easedElapsed =
-    segmentElapsed < easingDuration
-      ? segmentElapsed ** 3 / easingDuration ** 2
-      : segmentElapsed - easingDuration / 2;
-  const scrollOffset = isRunning ? easedElapsed * scrollSpeed : 0;
-  const groundY =
-    canvas.height - (images[activeSegment.frames[0]]?.height || 0);
+  const currentImg = images[norm(currentSegment.imagePath)];
+  if (!currentImg) return;
 
-  if (
-    isTransition &&
-    activeSegmentIndex > 0 &&
-    activeSegmentIndex < groundTimeline.length - 1
-  ) {
-    const previousSegment = groundTimeline[activeSegmentIndex - 1];
-    const nextSegment = groundTimeline[activeSegmentIndex + 1];
-    const previousFrame = previousSegment.frames.at(-1)!;
-    const transitionFrame = activeSegment.frames[0];
-    const nextFrame = nextSegment.frames[0];
-
-    const prevImg = images[previousFrame];
-    const transImg = images[transitionFrame];
-    const nextImg = images[nextFrame];
-
-    if (prevImg && transImg && nextImg) {
-      if (scrollOffset <= canvas.width) {
-        ctx.drawImage(prevImg, -scrollOffset, groundY);
-        ctx.drawImage(transImg, canvas.width - scrollOffset, groundY);
-      } else {
-        const offset = scrollOffset - canvas.width;
-        ctx.drawImage(transImg, -offset, groundY);
-        ctx.drawImage(nextImg, canvas.width - offset, groundY);
-      }
-    }
-  } else {
-    const frameCount = activeSegment.frames.length;
-    const segmentProgress = segmentElapsed / activeSegment.duration;
-    const exactFrame = segmentProgress * frameCount;
-    const currentIndex = Math.floor(exactFrame) % frameCount;
-    const nextIndex = (currentIndex + 1) % frameCount;
-
-    const currentImg = images[activeSegment.frames[currentIndex]];
-    const nextImg = images[activeSegment.frames[nextIndex]];
-
-    if (currentImg && nextImg) {
-      const scrollOffset = isRunning ? easedElapsed * scrollSpeed : 0;
-      ctx.drawImage(currentImg, -scrollOffset, groundY);
-      ctx.drawImage(nextImg, canvas.width - scrollOffset, groundY);
-    } else if (currentImg) {
-      ctx.drawImage(currentImg, 0, groundY);
-    }
+  // --- LAST SEGMENT: hold the final tile still (no scroll) ---
+  if (!nextSegment) {
+    const y = canvas.height - currentImg.height;
+    ctx.drawImage(currentImg, 0, y);
+    return;
   }
+  // -----------------------------------------------------------
+
+  const progress =
+    (currentTime - currentSegment.startTime) /
+    (currentSegment.endTime - currentSegment.startTime);
+
+  // No-gap fallback: if next image missing, reuse current
+  const nextImg: HTMLImageElement =
+    images[norm(nextSegment.imagePath)] ?? currentImg;
+
+  const scrollDistance = canvas.width;
+  const offset = scrollDistance * Math.min(Math.max(progress, 0), 1);
+  const y = canvas.height - currentImg.height;
+
+  ctx.drawImage(currentImg, -offset, y);
+  ctx.drawImage(nextImg, scrollDistance - offset, y);
 }

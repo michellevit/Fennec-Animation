@@ -80,8 +80,6 @@ This updates your GitHub repository's main branch.
 npm run deploy
 ```
 
-Or `npm run deploy-mac` for Mac uses (see [Notes for Non-Windows Users](#notes-for-non-windows-users) for more details)
-
 This will:
 
 - Rebuild your project using next build
@@ -176,5 +174,66 @@ When running the local preview server, you'll see two addresses:
 - Make modifications > more user-friendly
 - Add instructions
 - Attempt local + prod deploy with Mac
+
+
+
+
+
+ok so I have a React project, which has this directory:
+
+| - app
+| - componenets
+| | - Animation
+| | | - config
+| | | | - groundConfig.ts
+| | | | - spriteConfig.ts
+| | | - helpers
+| | | | - drawGround.tsx
+| | | | - drawSky.tsx
+| | | | - drawSprite.tsx
+| | | - Animation.tsx
+| | - Canvas
+| | | - Canvas.css
+| | | - Canvas.css
+| | - Controller
+| | | - Controller.css
+| | | - Controller.tsx
+| - public
+| | - ground
+| | | - scene_1
+| | | | - scene_a.png
+| | | | - scene_b.png
+| | | - scene_2
+| | | | - scene_a.png
+| | | | - scene_b.png
+| | | - scene_3
+| | | | - scene_a.png
+| | | | - scene_b.png
+| | | - transitions
+| | | | - transitions_1.png
+| | | | - transitions_2.png
+| | | | - transitions_3.png
+| | - music
+| | | - song.mp3
+| | - sprite
+| | | - jump1.png
+| | | - jump2.png
+| | | - jump3.png
+| | | - jump4.png
+| | | - jump5.png
+| | | - run1.png
+| | | - run2.png
+| | | - start1.png
+| | | - start1.png
+| - utils
+| | - preloadImages.ts
+- .gitignore
+- next.env.d.ts
+- next.config.ts
+- package-lock.json
+- package.json
+- tsconfig.json
+
+
 
 -->
