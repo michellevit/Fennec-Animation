@@ -160,6 +160,7 @@ When running the local preview server, you'll see two addresses:
 
 🛠️ TODO
 -----------------------------------
+- Play button orange on mobile?
 - Add sky elements .png (sun, moon)
 - Darken entire canvas at night (except for moon/sun)
 - Add foreground elements
