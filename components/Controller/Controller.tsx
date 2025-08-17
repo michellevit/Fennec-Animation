@@ -2,6 +2,7 @@
 
 // components/Controller.tsx
 import React, { useRef, useState, useEffect } from "react";
+import { FaPlay, FaPause, FaRedo } from "react-icons/fa";
 import "./Controller.css";
 import Canvas from "@/components/Canvas/Canvas";
 
@@ -10,6 +11,7 @@ export default function Controller() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const VISUAL_DELAY = 0.5;
 
   // Reset handler: pause, rewind, update state
   const reset = () => {
@@ -98,7 +100,10 @@ export default function Controller() {
 
       {/* Animation */}
       <div className="animation-wrapper">
-        <Canvas isPlaying={isPlaying} currentTime={currentTime} />
+        <Canvas
+          isPlaying={isPlaying}
+          currentTime={Math.max(0, currentTime - VISUAL_DELAY)}
+        />
       </div>
 
       {/* Controls */}
@@ -106,10 +111,10 @@ export default function Controller() {
         <div className="controller-bar">
           <div className="controller-buttons">
             <button onClick={togglePlay} title={isPlaying ? "Pause" : "Play"}>
-              {isPlaying ? "⏸️" : "▶️"}
+              {isPlaying ? <FaPause /> : <FaPlay />}
             </button>
             <button onClick={reset} title="Restart">
-              🔄
+              <FaRedo />
             </button>
           </div>
 

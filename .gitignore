@@ -24,7 +24,7 @@
 .DS_Store
 *.pem
 raw_images/*
-public/music/*
+public/music/song.mp3
 
 # debug
 npm-debug.log*

@@ -44,6 +44,13 @@ export const spritePhases = [
   },
 ];
 
+export const beatSync = {
+  bpm: 161.5,
+  framesPerBeat: 2,
+  audioLeadSec: 1.544,
+  runStartsAtSec: 1.0,
+};
+
 // Build absolute timings
 export const spritePhaseTimings = (() => {
   const totalExplicit = spritePhases.reduce(

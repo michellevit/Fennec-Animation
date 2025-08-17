@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { preloadImages } from "@/utils/preloadImages";
 import { drawSky } from "./helpers/drawSky";
+import { drawCelestials } from "./helpers/drawCelestials";
+import { drawGlobalLight } from "./helpers/drawGlobalLight";
+import { drawCelestialGlow } from "./helpers/drawCelestialGlow";
 import { drawGround } from "./helpers/drawGround";
 import { drawSprite } from "./helpers/drawSprite";
 import { drawFade } from "./helpers/drawFade";
@@ -32,10 +35,13 @@ export default function Animation({
       ...scenes.flatMap((scene) => scene.frames),
       ...transitions.map((t) => t.frame),
     ];
-
     const spriteFrames = spritePhaseTimings.flatMap((phase) => phase.frames);
 
-    const allFrames = [...groundFrames, ...spriteFrames];
+    const celestialElements = ["/elements/sun.png", "/elements/moon.png"];
+
+    const allFrames = Array.from(
+      new Set([...groundFrames, ...spriteFrames, ...celestialElements])
+    );
 
     preloadImages(allFrames).then(setImages);
   }, []);
@@ -44,8 +50,10 @@ export default function Animation({
     if (!canvas || !ctx || Object.keys(images).length === 0) return;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     drawSky(ctx, canvas, currentTime);
+    drawCelestials(ctx, canvas, currentTime, images);
+    drawGlobalLight(ctx, canvas, currentTime);
+    drawCelestialGlow(ctx, canvas, currentTime);
     drawGround(ctx, canvas, currentTime, images);
     drawSprite(ctx, canvas, currentTime, images);
     drawFade(ctx, canvas, currentTime);
