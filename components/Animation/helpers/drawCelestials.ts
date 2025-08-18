@@ -9,14 +9,31 @@ export function drawCelestials(
 ) {
   const sun = images["/elements/sun.png"];
   const moon = images["/elements/moon.png"];
-  if (!sun || !moon) return;
-
   const { sun: S, moon: M } = getDayState(canvas, currentTime);
 
-  ctx.save();
-  // draw sun first, then moon (order doesn’t matter much behind ground)
-  if (S.visible) ctx.drawImage(sun, S.x - sun.width / 2, S.y - sun.height / 2);
-  if (M.visible)
-    ctx.drawImage(moon, M.x - moon.width / 2, M.y - moon.height / 2);
-  ctx.restore();
+  if (!S.visible && !M.visible) return; // <-- move guard to the top
+
+  if (S.visible) {
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    if (sun) ctx.drawImage(sun, S.x - sun.width / 2, S.y - sun.height / 2);
+    else {
+      ctx.fillStyle = "rgba(255,220,120,0.95)";
+      ctx.beginPath();
+      ctx.arc(S.x, S.y, 50, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  } else {
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    if (moon) ctx.drawImage(moon, M.x - moon.width / 2, M.y - moon.height / 2);
+    else {
+      ctx.fillStyle = "rgba(210,230,255,0.95)";
+      ctx.beginPath();
+      ctx.arc(M.x, M.y, 50, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
 }

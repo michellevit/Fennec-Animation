@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { preloadImages } from "@/utils/preloadImages";
 import { drawSky } from "./helpers/drawSky";
 import { drawCelestials } from "./helpers/drawCelestials";
+import { drawParallax } from "./helpers/drawParallax";
 import { drawGlobalLight } from "./helpers/drawGlobalLight";
 import { drawCelestialGlow } from "./helpers/drawCelestialGlow";
 import { drawGround } from "./helpers/drawGround";
 import { drawSprite } from "./helpers/drawSprite";
+import { drawHole } from "./helpers/drawHole";
 import { drawFade } from "./helpers/drawFade";
 
 import {
@@ -39,8 +41,18 @@ export default function Animation({
 
     const celestialElements = ["/elements/sun.png", "/elements/moon.png"];
 
+    const parallaxAssets = ["/parallax/cloud.png", "/parallax/star.png"];
+
+    const holeElement = ["/elements/hole.png"];
+
     const allFrames = Array.from(
-      new Set([...groundFrames, ...spriteFrames, ...celestialElements])
+      new Set([
+        ...groundFrames,
+        ...spriteFrames,
+        ...celestialElements,
+        ...parallaxAssets,
+        ...holeElement,
+      ])
     );
 
     preloadImages(allFrames).then(setImages);
@@ -52,10 +64,12 @@ export default function Animation({
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawSky(ctx, canvas, currentTime);
     drawCelestials(ctx, canvas, currentTime, images);
-    drawGlobalLight(ctx, canvas, currentTime);
+    drawParallax(ctx, canvas, currentTime, images);
     drawCelestialGlow(ctx, canvas, currentTime);
     drawGround(ctx, canvas, currentTime, images);
     drawSprite(ctx, canvas, currentTime, images);
+    drawHole(ctx, canvas, currentTime, images);
+    drawGlobalLight(ctx, canvas, currentTime);
     drawFade(ctx, canvas, currentTime);
   }, [canvas, ctx, currentTime, images]);
 
