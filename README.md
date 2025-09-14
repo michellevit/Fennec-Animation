@@ -1,14 +1,15 @@
 # Fennec Animation
 
-![Next.js](https://img.shields.io/badge/Next.js-15.3.1-black?style=flat-square&logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js-15.3.1-000000?style=flat-square&logo=next.js)
 ![React](https://img.shields.io/badge/React-19.0.0-61dafb?style=flat-square&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-F7DF1E?style=flat-square&logo=javascript)
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-181717?style=flat-square&logo=github&logoColor=white)](https://fennec.michellef.dev)
+
+<!-- [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-181717?style=flat-square&logo=github&logoColor=white)](https://fennec.michellef.dev) -->
 
 A config‑driven, canvas‑based pixel animation synced to a song. Fork it, drop in your own artwork, and watch your animation come to life.
 
-[![Demo](https://img.shields.io/badge/Demo-0b3d91?style=flat-square)](https://fennec.michellef.dev)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-181717?style=flat-square&logo=github&logoColor=white)](https://fennec.michellef.dev)
 
 [![Preview](./docs/preview.gif)](https://fennec.michellef.dev)
 
