@@ -1,6 +1,5 @@
 "use client";
 
-// components/Controller.tsx
 import React, { useRef, useState, useEffect } from "react";
 import { FaPlay, FaPause, FaRedo } from "react-icons/fa";
 import "./Controller.css";
@@ -10,10 +9,10 @@ export default function Controller() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const FALLBACK_DURATION = 90; // seconds
+  const [duration, setDuration] = useState<number>(FALLBACK_DURATION);
   const VISUAL_DELAY = 0.5;
 
-  // Reset handler: pause, rewind, update state
   const reset = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -28,41 +27,38 @@ export default function Controller() {
     if (!audio) return;
 
     const updateTime = () => setCurrentTime(audio.currentTime);
-    const onLoaded = () => {
-      if (audio.duration && duration === 0) {
+    const setRealDuration = () => {
+      if (Number.isFinite(audio.duration) && audio.duration > 0) {
         setDuration(audio.duration);
       }
     };
     const onEnded = () => reset();
 
     audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("loadedmetadata", onLoaded);
+    audio.addEventListener("loadedmetadata", setRealDuration);
+    audio.addEventListener("durationchange", setRealDuration);
+    audio.addEventListener("canplaythrough", setRealDuration);
     audio.addEventListener("ended", onEnded);
 
-    // Fallback for browsers that don't fire loadedmetadata reliably
-    const durationCheck = setTimeout(onLoaded, 1500);
+    audio.load();
+    const durationCheck = setTimeout(setRealDuration, 800);
 
     return () => {
       audio.removeEventListener("timeupdate", updateTime);
-      audio.removeEventListener("loadedmetadata", onLoaded);
+      audio.removeEventListener("loadedmetadata", setRealDuration);
+      audio.removeEventListener("durationchange", setRealDuration);
+      audio.removeEventListener("canplaythrough", setRealDuration);
       audio.removeEventListener("ended", onEnded);
       clearTimeout(durationCheck);
     };
-  }, [duration]);
-
-  // Reset exactly at 90 seconds
-  useEffect(() => {
-    if (currentTime >= 90) {
-      reset();
-    }
-  }, [currentTime]);
+  }, []);
 
   const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60)
+    const mm = Math.floor(seconds / 60);
+    const ss = Math.floor(seconds % 60)
       .toString()
       .padStart(2, "0");
-    return `${mins}:${secs}`;
+    return `${mm}:${ss}`;
   };
 
   const togglePlay = () => {
@@ -70,8 +66,10 @@ export default function Controller() {
     if (!audio) return;
 
     if (audio.paused) {
-      audio.play();
-      setIsPlaying(true);
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {});
     } else {
       audio.pause();
       setIsPlaying(false);
@@ -83,10 +81,8 @@ export default function Controller() {
     if (!audio || !duration) return;
 
     const rect = e.currentTarget.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const percent = clickX / rect.width;
-
-    audio.currentTime = percent * duration;
+    const percent = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = Math.max(0, Math.min(duration, percent * duration));
   };
 
   const progress = duration ? (currentTime / duration) * 100 : 0;
@@ -98,23 +94,34 @@ export default function Controller() {
         Your browser does not support the audio element.
       </audio>
 
-      {/* Animation */}
       <div className="animation-wrapper">
         <Canvas
           isPlaying={isPlaying}
           currentTime={Math.max(0, currentTime - VISUAL_DELAY)}
+          duration={duration}
         />
       </div>
 
-      {/* Controls */}
       <div className="controller-controls">
         <div className="controller-bar">
           <div className="controller-buttons">
-            <button onClick={togglePlay} title={isPlaying ? "Pause" : "Play"}>
-              {isPlaying ? <FaPause /> : <FaPlay />}
+            <button
+              onClick={togglePlay}
+              onMouseUp={(e) => (e.currentTarget as HTMLButtonElement).blur()}
+              aria-label={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying ? (
+                <FaPause aria-hidden="true" />
+              ) : (
+                <FaPlay aria-hidden="true" />
+              )}
             </button>
-            <button onClick={reset} title="Restart">
-              <FaRedo />
+            <button
+              onClick={reset}
+              onMouseUp={(e) => (e.currentTarget as HTMLButtonElement).blur()}
+              aria-label="Restart"
+            >
+              <FaRedo aria-hidden="true" />
             </button>
           </div>
 

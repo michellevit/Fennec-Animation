@@ -44,7 +44,7 @@ export function drawSprite(
 
     // Flip frames at a constant musical rate (even gait)
     const toggles = Math.floor(beats * beatSync.framesPerBeat);
-    const idx = toggles % runFrames.length; // 0/1
+    const idx = toggles % runFrames.length;
 
     const img = images[runFrames[idx]];
     if (!img) return;

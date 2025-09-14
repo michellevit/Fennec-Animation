@@ -1,10 +1,10 @@
 // components/Animation/Animation.tsx
-
 import { useEffect, useState } from "react";
 import { preloadImages } from "@/utils/preloadImages";
 import { drawSky } from "./helpers/drawSky";
 import { drawCelestials } from "./helpers/drawCelestials";
-import { drawParallax } from "./helpers/drawParallax";
+import { drawStars } from "./helpers/drawStars";
+import { drawClouds } from "./helpers/drawClouds";
 import { drawGlobalLight } from "./helpers/drawGlobalLight";
 import { drawCelestialGlow } from "./helpers/drawCelestialGlow";
 import { drawGround } from "./helpers/drawGround";
@@ -23,12 +23,15 @@ type AnimationProps = {
   ctx: CanvasRenderingContext2D | null;
   currentTime: number;
   isPlaying: boolean;
+  duration?: number; // ← add
 };
 
 export default function Animation({
   canvas,
   ctx,
   currentTime,
+  isPlaying,
+  duration,
 }: AnimationProps) {
   const [images, setImages] = useState<Record<string, HTMLImageElement>>({});
 
@@ -40,9 +43,7 @@ export default function Animation({
     const spriteFrames = spritePhaseTimings.flatMap((phase) => phase.frames);
 
     const celestialElements = ["/elements/sun.png", "/elements/moon.png"];
-
     const parallaxAssets = ["/parallax/cloud.png", "/parallax/star.png"];
-
     const holeElement = ["/elements/hole.png"];
 
     const allFrames = Array.from(
@@ -63,15 +64,19 @@ export default function Animation({
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawSky(ctx, canvas, currentTime);
+    drawStars(ctx, canvas, currentTime, images);
     drawCelestials(ctx, canvas, currentTime, images);
-    drawParallax(ctx, canvas, currentTime, images);
+    drawClouds(ctx, canvas, currentTime, images);
     drawCelestialGlow(ctx, canvas, currentTime);
-    drawGround(ctx, canvas, currentTime, images);
+
+    // pass duration (seconds) so ground timeline scales
+    drawGround(ctx, canvas, currentTime, images, duration);
+
     drawSprite(ctx, canvas, currentTime, images);
     drawHole(ctx, canvas, currentTime, images);
     drawGlobalLight(ctx, canvas, currentTime);
     drawFade(ctx, canvas, currentTime);
-  }, [canvas, ctx, currentTime, images]);
+  }, [canvas, ctx, currentTime, images, duration]);
 
   return null;
 }

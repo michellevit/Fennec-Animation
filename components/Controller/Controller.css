@@ -40,6 +40,23 @@
   cursor: pointer;
   transition: opacity 0.5s ease;
   margin-left: 5px;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.controller-buttons button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.controller-buttons button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .controller-buttons button:hover {

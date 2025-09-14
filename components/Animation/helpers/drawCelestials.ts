@@ -11,7 +11,7 @@ export function drawCelestials(
   const moon = images["/elements/moon.png"];
   const { sun: S, moon: M } = getDayState(canvas, currentTime);
 
-  if (!S.visible && !M.visible) return; // <-- move guard to the top
+  if (!S.visible && !M.visible) return;
 
   if (S.visible) {
     ctx.save();

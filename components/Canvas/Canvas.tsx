@@ -1,7 +1,6 @@
 "use client";
 
 // components/Canvas.tsx
-
 import React, { useRef, useEffect, useState } from "react";
 import "./Canvas.css";
 import Animation from "@/components/Animation/Animation";
@@ -9,11 +8,13 @@ import Animation from "@/components/Animation/Animation";
 export type AnimationCanvasProps = {
   currentTime: number;
   isPlaying: boolean;
+  duration?: number; // ← add
 };
 
 export default function AnimationCanvas({
   currentTime,
   isPlaying,
+  duration,
 }: AnimationCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
@@ -35,7 +36,6 @@ export default function AnimationCanvas({
 
     resize();
     window.addEventListener("resize", resize);
-
     return () => window.removeEventListener("resize", resize);
   }, []);
 
@@ -47,6 +47,7 @@ export default function AnimationCanvas({
         ctx={ctx}
         currentTime={currentTime}
         isPlaying={isPlaying}
+        duration={duration}
       />
     </div>
   );
