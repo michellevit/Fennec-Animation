@@ -32,13 +32,13 @@ A config‑driven, canvas‑based pixel animation synced to a song. Fork it, dro
 
 ## Summary
 
-- **What:** Next.js + Canvas pixel animation synced to a song.
-- **Highlights:** Config-first timelines (no engine), clean canvas pipeline, audio-driven progress, static export.
+- **What:** Next.js + Canvas pixel animation synced to a song
+- **Highlights:** Config-first timelines (no engine), clean canvas pipeline, audio-driven progress, static export
 - **Try it:**
   - **Windows:** `git clone https://github.com/michellevit/Fennec-Animation.git && cd Fennec-Animation && npm i && npm run preview`
   - **macOS/Linux:** `git clone https://github.com/michellevit/Fennec-Animation.git && cd Fennec-Animation && npm i && npm run preview-mac`
-- **Customize:** Replace image/song assets in `./public/*` or tweak `./components/Animation/config/*.ts`.
-- **Env:** Node 18+ • modern Chrome/Edge/Firefox/Safari • macOS/Windows/Linux.
+- **Customize:** Replace image/song assets in `./public/*` or tweak `./components/Animation/config/*.ts`
+- **Env:** Node 18+ • modern Chrome/Edge/Firefox/Safari • macOS/Windows/Linux
 
 ## Getting Started
 
@@ -89,11 +89,11 @@ _Optional: [deploy to GitHub Pages](./docs/deploying-to-the-web.md)_
 ### Add a Song
 
 - Add your track to the folder **`./public/music`** with the name **`song.mp3`**
-- If you use a different path/name, update the audio source in **`./components/Controller/Controller.tsx`**.
+- If you use a different path/name, update the audio source in **`./components/Controller/Controller.tsx`**
 - Song length
-  - The app auto-detects the track length from `./public/music/song.mp3`. If metadata isn’t available, it falls back to **90 s**.
-  - To override, set `FALLBACK_DURATION` in `./components/Controller/Controller.tsx`.
-- Keep files ≤ **10–20 MB** for faster loads. MP3 (CBR or VBR) at 128–256 kbps is plenty.
+  - The app auto-detects the track length from `./public/music/song.mp3`. If metadata isn’t available, it falls back to **90 s**
+  - To override, set `FALLBACK_DURATION` in `./components/Controller/Controller.tsx`
+- Keep files ≤ **10–20 MB** for faster loads. MP3 (CBR or VBR) at 128–256 kbps is plenty
 
 ### Update the Artwork
 
@@ -112,11 +112,11 @@ public/
 
 #### General guidelines:
 
-- Use PNG with transparency for sprites/elements; PNG/JPG for wide ground layers.
-- Keep sprite frames the same width/height across an action (and ideally across all actions) for smooth animation.
-- Export pixel art with nearest-neighbor (no smoothing) so edges stay crisp.
-- Ground seams: design edges to butt cleanly so the horizontal slide shows no gaps, and ensure the height is identical to avoid uneven ground between frames.
-- Keep file sizes reasonable (web): prefer a few wide layers over many tiny slices.
+- Use PNG with transparency for sprites/elements; PNG/JPG for wide ground layers
+- Keep sprite frames the same width/height across an action (and ideally across all actions) for smooth animation
+- Export pixel art with nearest-neighbor (no smoothing) so edges stay crisp
+- Ground seams: design edges to butt cleanly so the horizontal slide shows no gaps, and ensure the height is identical to avoid uneven ground between frames
+- Keep file sizes reasonable (web): prefer a few wide layers over many tiny slices
 - _Optional: use [Pixil Art](https://www.pixilart.com/)_
 
 #### What to change (minimal code)
@@ -125,7 +125,7 @@ public/
 - If you rename or add files, update the matching config:
   - `./components/Animation/config/spriteConfig.ts` — map actions → frame filenames
   - `./components/Animation/config/groundConfig.ts` — order scenes/transitions and their durations
-  - `./components/Animation/config/fadeConfig.ts` — crossfades and day/night timing.
+  - `./components/Animation/config/fadeConfig.ts` — crossfades and day/night timing
 
 #### Examples
 
@@ -174,9 +174,9 @@ npm run deploy-mac  # macOS/Linux
 
 ## Project Architecture
 
-- **Controller** (`./components/Controller/Controller.tsx`): loads the audio element, tracks `currentTime`/`duration`, forwards them to the canvas.
-- **Canvas** (`./components/Canvas/Canvas.tsx`): owns the `<canvas>`, size, and 2D context; mounts the animation loop.
-- **Animation** (`./components/Animation/Animation.tsx`): preloads assets and orchestrates per-frame draw calls.
+- **Controller** (`./components/Controller/Controller.tsx`): loads the audio element, tracks `currentTime`/`duration`, forwards them to the canvas
+- **Canvas** (`./components/Canvas/Canvas.tsx`): owns the `<canvas>`, size, and 2D context; mounts the animation loop
+- **Animation** (`./components/Animation/Animation.tsx`): preloads assets and orchestrates per-frame draw calls
 - **Config** (`./components/Animation/config/*`): data-driven timelines & settings
   - `spriteConfig.ts` — sprite actions → frame files
   - `groundConfig.ts` — scene order + transition frames
@@ -184,7 +184,7 @@ npm run deploy-mac  # macOS/Linux
 - **Helpers** (`./components/Animation/helpers/*`): rendering and timing utilities
   - `drawSky`, `drawParallax`, `drawGround`, `drawSprite`, `drawStars`, `drawFade`, `drawGlobalLight`, etc.
   - `buildGroundTimeline.ts` — converts config → timed ground segments (scaled to the song duration)
-- **Assets** (`./public/*`): images and audio (e.g., `sprite/`, `ground/`, `elements/`, `parallax/`, `music/song.mp3`).
+- **Assets** (`./public/*`): images and audio (e.g., `sprite/`, `ground/`, `elements/`, `parallax/`, `music/song.mp3`)
 
 <p align="left">
   <img src="./docs/architecture.svg" alt="Fennec Animation high-level architecture: Controller → Animation → draw helpers → Canvas" width="720">
@@ -194,15 +194,15 @@ npm run deploy-mac  # macOS/Linux
 
 ### Add a new scene
 
-1. Drop art into `./public/ground/scene_5/`.
-2. Reference it in `./components/Animation/config/groundConfig.ts`.
-3. Run `npm run preview` and verify seams.
+1. Drop art into `./public/ground/scene_5/`
+2. Reference it in `./components/Animation/config/groundConfig.ts`
+3. Run `npm run preview` and verify seams
 
 ### Add a sprite action
 
-1. Add frames to `./public/sprite/` (same width/height).
-2. Map them in `./components/Animation/config/spriteConfig.ts` (e.g., `dash: ["dash1.png", "dash2.png"]`).
-3. Hook the action where needed in the animation timeline.
+1. Add frames to `./public/sprite/` (same width/height)
+2. Map them in `./components/Animation/config/spriteConfig.ts` (e.g., `dash: ["dash1.png", "dash2.png"]`)
+3. Hook the action where needed in the animation timeline
 
 ## Commands
 
@@ -214,16 +214,16 @@ npm run deploy      # Windows: build (with PowerShell clean) + push to gh-pages
 npm run deploy-mac  # macOS/Linux: build (no PowerShell) + push to gh-pages
 ```
 
-npm run preview prints both a localhost URL (for this machine) and a LAN URL (for phones/tablets on the same Wi‑Fi).
+npm run preview prints both a localhost URL (for this machine) and a LAN URL (for phones/tablets on the same Wi‑Fi)
 
-**Note:** Use `npm run dev` if you prefer hot‑reload during code edits, or else [use preview](#dev-vs-preview) instead to simulate production (but don't run both at the same time).
+**Note:** Use `npm run dev` if you prefer hot‑reload during code edits, or else [use preview](#dev-vs-preview) instead to simulate production (but don't run both at the same time)
 
 ## Deploying Updates to Production
 
 _Prerequisite: [deploy to GitHub Pages](./docs/deploying-to-the-web.md)_
 
-> **Note:** If you fork and deploy to GitHub Pages - remove or replace `./public/CNAME`.  
-> It points to my custom domain and will cause your Pages deploy to fail unless you own that domain.
+> **Note:** If you fork and deploy to GitHub Pages - remove or replace `./public/CNAME`
+> It points to my custom domain and will cause your Pages deploy to fail unless you own that domain
 
 After making changes to your project:
 
@@ -256,17 +256,17 @@ This will:
 
 #### npm run dev
 
-- Hot reloads on file changes.
-- Includes dev-only code (warnings, slow paths).
-- Fast rebuilds for dev feedback.
-- Not optimized for speed or size.
+- Hot reloads on file changes
+- Includes dev-only code (warnings, slow paths)
+- Fast rebuilds for dev feedback
+- Not optimized for speed or size
 
 #### npm run preview
 
-- Uses output of next build (optimized, minified, production-ready files).
-- No hot reloads.
-- Exactly what will be deployed to production.
-- Useful for realistic testing.
+- Uses output of next build (optimized, minified, production-ready files)
+- No hot reloads
+- Exactly what will be deployed to production
+- Useful for realistic testing
 
 ### npm run preview: Local vs Network:
 
@@ -277,20 +277,20 @@ When running the local preview server, you'll see two addresses:
 
 #### Use http://localhost:5000 when:
 
-- Testing in your local browser (Chrome, Firefox, Edge).
-- Previewing layout, animations, and functionality on your own computer.
-- You don’t need to test from other devices.
+- Testing in your local browser (Chrome, Firefox, Edge)
+- Previewing layout, animations, and functionality on your own computer
+- You don’t need to test from other devices
 
 #### Use http://10.0.0.89:5000 when:
 
-- Testing the site on a phone, tablet, or another device connected to your Wi-Fi/LAN.
-- Checking responsive layouts and touch interactions on different screen sizes.
-- Demoing the project to someone else on the same network.
+- Testing the site on a phone, tablet, or another device connected to your Wi-Fi/LAN
+- Checking responsive layouts and touch interactions on different screen sizes
+- Demoing the project to someone else on the same network
 
 #### Summary
 
-- Both links serve the exact same local build.
-- The only difference is which device you're accessing it from.
+- Both links serve the exact same local build
+- The only difference is which device you're accessing it from
 - localhost only works on the computer you run `npm run preview` on
 
 ## License
