@@ -130,7 +130,7 @@ public/
 
 #### Examples
 
-\_Sprite mapping (`./components/Animation/config/spriteConfig.ts`)
+Sprite mapping (`./components/Animation/config/spriteConfig.ts`)
 
 ```ts
 export const spriteConfig = {
