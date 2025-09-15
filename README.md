@@ -98,7 +98,7 @@ _Optional: [deploy to GitHub Pages](./docs/deploying-to-the-web.md)_
 
 ### Update the Artwork
 
-#### Where assets live
+#### Where Assets Live
 
 ```txt
 public/
@@ -111,7 +111,7 @@ public/
   music/         # song.mp3 (replace with your track)
 ```
 
-#### General guidelines:
+#### General Guidelines:
 
 - Use PNG with transparency for sprites/elements; PNG/JPG for wide ground layers
 - Keep sprite frames the same width/height across an action (and ideally across all actions) for smooth animation
@@ -120,7 +120,7 @@ public/
 - Keep file sizes reasonable (web): prefer a few wide layers over many tiny slices
 - _Optional: use [Pixil Art](https://www.pixilart.com/)_
 
-#### What to change (minimal code)
+#### What to Change (minimal code)
 
 - Replace files in public/\* with your art (keep names if you want to avoid code changes)
 - If you rename or add files, update the matching config:
@@ -153,7 +153,7 @@ export const groundTimeline = [
 ];
 ```
 
-#### Quick checklist
+#### Quick Checklist
 
 - ☐ New song placed at public/music/song.mp3 (or update the reference)
 - ☐ Sprite frames added to public/sprite/ with consistent dimensions
@@ -193,13 +193,13 @@ npm run deploy-mac  # macOS/Linux
 
 ## Extending the Project
 
-### Add a new scene
+### Add a New Scene
 
 1. Drop art into `./public/ground/scene_5/`
 2. Reference it in `./components/Animation/config/groundConfig.ts`
 3. Run `npm run preview` and verify seams
 
-### Add a sprite action
+### Add a Sprite Action
 
 1. Add frames to `./public/sprite/` (same width/height)
 2. Map them in `./components/Animation/config/spriteConfig.ts` (e.g., `dash: ["dash1.png", "dash2.png"]`)
