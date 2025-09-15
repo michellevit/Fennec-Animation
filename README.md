@@ -164,11 +164,11 @@ export const groundTimeline = [
 ### Preview and Deploy
 
 ```bash
-# Preview locally (choose one)
+# Preview locally
 npm run preview     # Windows
 npm run preview-mac # macOS/Linux
 
-# Deploy to GitHub Pages (choose one)
+# Deploy to GitHub Pages
 npm run deploy      # Windows
 npm run deploy-mac  # macOS/Linux
 ```
