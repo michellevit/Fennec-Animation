@@ -217,7 +217,7 @@ npm run deploy-mac  # macOS/Linux: build (no PowerShell) + push to gh-pages
 
 npm run preview prints both a localhost URL (for this machine) and a LAN URL (for phones/tablets on the same Wi‑Fi)
 
-**Note:** Use `npm run dev` if you prefer hot‑reload during code edits, or else [use preview](#dev-vs-preview) instead to simulate production (but don't run both at the same time)
+> **Note:** Use `npm run dev` if you prefer hot‑reload during code edits, or else use preview instead to simulate production (but don't run both at the same time) - [more info here](#dev-vs-preview)
 
 ## Deploying Updates to Production
 
