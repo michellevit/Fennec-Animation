@@ -107,7 +107,7 @@ public/
     transitions/ # images used to blend scene_X -> scene_Y
   parallax/      # background layers (e.g., distant clouds)
   sprite/        # fox frames (start/run/jump/etc.)
-  favicon/       # site icon for production/GitHub Pages
+  favicon        # site icon for production/GitHub Pages
   music/         # song.mp3 (replace with your track)
 ```
 
