@@ -209,9 +209,9 @@ npm run deploy-mac  # macOS/Linux
 
 ```bash
 npm run dev         # hot-reload dev server (localhost:3000)
-npm run preview     # Windows: build (with PowerShell clean) + serve static export
+npm run preview     # Windows: build (with PowerShell) + serve static export
 npm run preview-mac # macOS/Linux: build (no PowerShell) + serve static export
-npm run deploy      # Windows: build (with PowerShell clean) + push to gh-pages
+npm run deploy      # Windows: build (with PowerShell) + push to gh-pages
 npm run deploy-mac  # macOS/Linux: build (no PowerShell) + push to gh-pages
 ```
 
